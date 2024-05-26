@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import TextField from "../components/TextField";
-import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
 import { addUser } from "../redux/slices/userSlice";
+import UserForm from "../components/UserForm";
 
 const AddUser = () => {
   const dispatch = useDispatch();
@@ -13,33 +12,58 @@ const AddUser = () => {
 
   const [values, setValues] = useState({
     name: "",
+    age: "",
     email: "",
   });
 
+  const handleChange = (e) => {
+    console.log("target: ", e.target);
+    const { name, value } = e.target;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
   const handleAddUser = () => {
-    setValues({ name: "", email: "" });
     dispatch(addUser({ id: uuidv4(), ...values }));
+    setValues({ name: "", age: "", email: "" });
     navigate("/");
   };
 
-  console.log("AddUser component");
   return (
-    <div className="mt-10 max-w-xl mx-auto">
-      <TextField
-        label="Name"
-        value={values.name}
-        onChange={(e) => setValues({ ...values, name: e.target.value })}
-        inputProps={{ type: "text", placeholder: "Enter Name" }}
-      />
-      <br />
-      <TextField
-        label="Email"
-        values={values.email}
-        onChange={(e) => setValues({ ...values, email: e.target.value })}
-        inputProps={{ type: "email", placeholder: "Enter Email" }}
-      />
-      <Button onClick={handleAddUser}>Submit</Button>
-    </div>
+    <UserForm
+      values={values}
+      handleChange={handleChange}
+      handleSubmit={handleAddUser}
+      buttonText="Submit"
+    />
+    // <div className="mt-10 max-w-xl mx-auto">
+    //   <TextField
+    //     label="Name"
+    //     name="name"
+    //     value={values.name}
+    //     onChange={handleChange}
+    //     inputProps={{ type: "text", placeholder: "Enter Name" }}
+    //   />
+    //   <br />
+    //   <TextField
+    //     label="Age"
+    //     name="age"
+    //     value={values.age}
+    //     onChange={handleChange}
+    //     inputProps={{ type: "number", placeholder: "Enter Age" }}
+    //   />
+    //   <br />
+    //   <TextField
+    //     label="Email"
+    //     name="email"
+    //     values={values.email}
+    //     onChange={handleChange}
+    //     inputProps={{ type: "email", placeholder: "Enter Email" }}
+    //   />
+    //   <Button onClick={handleAddUser}>Submit</Button>
+    // </div>
   );
 };
 

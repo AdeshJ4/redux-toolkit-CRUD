@@ -8,10 +8,10 @@ const userSlice = createSlice({
       state.push(action.payload);
     },
     editUser: (state, action) => {
-      const { id, name, email } = action?.payload;
+      const { id, name, age, email } = action?.payload;
       const user = state.find((u) => u?.id === id);
       if (user) {
-        (user.name = name), (user.email = email);
+        (user.name = name), (user.email = email), (user.age = age);
       }
     },
     deleteUser: (state, action) => {
